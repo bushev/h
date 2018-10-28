@@ -16,6 +16,7 @@ module.exports = {
             repo: 'git@github.com:bushev/h.git',
             path: '/root/h',
             ref: 'origin/master',
+            'pre-setup': 'docker-compose -f ./h/source/docker-compose.yml up -d',
             'post-deploy': 'npm i && pm2 startOrGracefulReload ecosystem.config.js --env production',
             env: {
                 NODE_ENV: 'production'

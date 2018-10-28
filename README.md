@@ -25,7 +25,7 @@ textedit ~/.ssh.config
 pm2 deploy production setup
 
 # Deploy
-pm2 deploy production
+pm2 deploy production update
 
 # Install Node.js
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
