@@ -33,7 +33,7 @@ class Loader {
 
         app.get('/', async (req, res, next) => {
 
-            const a = d + 0;
+            // const a = d + 0;
 
             res.send('hello world');
         });
@@ -42,7 +42,7 @@ class Loader {
 
             console.error(err.stack);
 
-            res.status(500).send('Something broke!');
+            res.status(500).send('Something broken!');
         });
 
         app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
