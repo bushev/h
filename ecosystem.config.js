@@ -16,8 +16,7 @@ module.exports = {
             repo: 'git@github.com:bushev/h.git',
             path: '/root/h',
             ref: 'origin/master',
-            'post-setup': 'pm2 startOrRestart ecosystem.config.js --env production',
-            'post-deploy': 'npm i && pm2 restart all',
+            'post-deploy': 'npm i && pm2 startOrGracefulReload ecosystem.config.js --env production',
             env: {
                 NODE_ENV: 'production'
             }
