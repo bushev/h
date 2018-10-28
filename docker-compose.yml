@@ -1,0 +1,15 @@
+version: '3'
+services:
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.0.3
+    command: mongod --bind_ip 0.0.0.0 --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: h
+      MONGO_INITDB_ROOT_PASSWORD: my_password
+    volumes:
+      - ./data/mongo:/data/db/:rw
+    ports:
+      - '127.0.0.1:27017:27017'
+    restart: always
