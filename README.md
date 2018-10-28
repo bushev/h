@@ -19,8 +19,13 @@ ssh-copy-id -i ~/.ssh/h.pub root@176.112.204.146
 ssh root@176.112.204.146 -i ~/.ssh/h
 
 # Add host to .ssh/config
+textedit ~/.ssh.config
 
 # Prepare deployment
+pm2 deploy production setup
+
+# Deploy
+pm2 deploy production
 
 # Install Node.js
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
