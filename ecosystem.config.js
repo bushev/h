@@ -17,7 +17,7 @@ module.exports = {
             path: '/root/h',
             ref: 'origin/master',
             'post-setup': 'pm2 startOrRestart ecosystem.config.js --env production',
-            'post-deploy': 'npm i',
+            'post-deploy': 'npm i && pm2 restart all',
             env: {
                 NODE_ENV: 'production'
             }
