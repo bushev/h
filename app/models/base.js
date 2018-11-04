@@ -9,6 +9,7 @@ class BaseModel {
 
     constructor() {
 
+        this.responseFields = [];
     }
 
     bootstrap() {

@@ -15,6 +15,8 @@ class UserModel extends BaseModel {
             email: {type: mongoose.SchemaTypes.Email, required: true, unique: true, index: true},
             type: {type: String, required: true, index: true, enum: ['manager', 'resident']}
         };
+
+        this.responseFields = ['id', 'name', 'email', 'type'];
     }
 
     setupSchema() {

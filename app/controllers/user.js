@@ -7,9 +7,15 @@ const userModel      = require('../models/user');
 
 class UserController extends BaseController {
 
+    constructor(request, response, next) {
+        super(request, response, next);
+
+        this.model = userModel;
+    }
+
     async signin() {
 
-        const user = await userModel.getUserForLogIn(this.request.body);
+        const user = await this.model.getUserForLogIn(this.request.body);
 
         if (user.id) {
 
