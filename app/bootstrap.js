@@ -5,8 +5,6 @@ const mongoose   = require('mongoose');
 const bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
 const morgan     = require('morgan');
-const path       = require('path');
-const fs         = require('fs');
 
 require('express-async-errors');
 
@@ -39,8 +37,6 @@ class Loader {
         }
 
         console.log(`MongoDB connected`);
-
-        // this.loadModels();
 
         // Add super manager account
         await this.addSuperManager();
@@ -120,15 +116,6 @@ class Loader {
             await userModel.insert(superManagerData);
         }
     }
-
-    // loadModels() {
-    //
-    //     const fileNames = fs.readdirSync(path.resolve(__dirname, 'models'));
-    //
-    //     fileNames.filter(fileName => !['base.js'].includes(fileName)).forEach(fileName => {
-    //         require(path.resolve(__dirname, 'models', fileName));
-    //     });
-    // }
 }
 
 const loader = new Loader();
