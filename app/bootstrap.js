@@ -4,6 +4,7 @@ const express    = require('express');
 const mongoose   = require('mongoose');
 const bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
+const morgan     = require('morgan');
 
 require('express-async-errors');
 
@@ -41,6 +42,8 @@ class Loader {
 
         const app = express();
 
+        app.use(morgan('combined'));
+
         app.use(bodyParser.urlencoded({extended: false}));
         app.use(bodyParser.json());
 
@@ -50,6 +53,8 @@ class Loader {
         app.use(expressJwt({secret: 'JWT_SECRET_TOKEN_HERE'}));
 
         app.get('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'list'));
+        app.get('/resident-applications/:id', (req, res, next) => residentApplicationController(req, res, next, 'get'));
+        app.put('/resident-applications/:id/:action', (req, res, next) => residentApplicationController(req, res, next, 'action'));
 
         app.use((err, req, res, next) => {
 
