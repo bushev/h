@@ -20,6 +20,7 @@
     "mongoose-bcrypt": "1.6.0",
     "mongoose-deep-populate": "3.1.1",
     "mongoose-type-email": "1.0.9",
-    "morgan": "1.9.1"
+    "morgan": "1.9.1",
+    "node-media-server": "1.4.7"
   }
 }

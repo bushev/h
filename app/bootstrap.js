@@ -17,6 +17,8 @@ const zoneController                = require('./controllers/zone');
 const placeController               = require('./controllers/place');
 const eventController               = require('./controllers/event');
 
+const LiveStreamServer = require('./live-stream-server');
+
 const PORT = 3000;
 
 class Loader {
@@ -26,6 +28,8 @@ class Loader {
         await this.initDatabase();
 
         this.initHttp();
+
+        this.initLiveStreamServer();
     }
 
     async initDatabase() {
@@ -100,6 +104,28 @@ class Loader {
         });
 
         app.listen(PORT, () => console.log(`H app listening on port ${PORT}!`));
+    }
+
+    initLiveStreamServer() {
+
+        const config = {
+            rtmp: {
+                port: 1935,
+                chunk_size: 60000,
+                gop_cache: true,
+                ping: 60,
+                ping_timeout: 30
+            },
+            http: {
+                port: 8000,
+                allow_origin: '*'
+            },
+            logType: 3
+        };
+
+        const liveStreamServer = new LiveStreamServer(config);
+
+        liveStreamServer.bootstrap();
     }
 
     async addSuperManager() {

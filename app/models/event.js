@@ -20,6 +20,7 @@ class EventModel extends BaseModel {
             type: {type: String},
             description: {type: String},
             image: {type: String},
+            liveStreamAvailable: {type: Boolean},
             status: {type: String, required: true, index: true, enum: ['listed', 'unlisted']},
             place: {type: 'ObjectId', ref: 'place', autopopulate: true}
         };
