@@ -1,0 +1,732 @@
+openapi: 3.0.0
+info:
+  description: Почти REST API
+  version: "0.0.1"
+  title: Hackathon API Doc
+tags:
+- name: SignIn
+  description: Авторизация
+- name: Applications
+  description: Управление заявками на резидентство
+- name: Residents
+  description: Управление резидентами
+- name: Zones
+  description: Управление зонами
+- name: Places
+  description: Управление точками
+- name: Events
+  description: Управление событиями
+security:
+- BearerAuth: []
+paths:
+  /signin:
+    post:
+      tags:
+      - SignIn
+      security: []
+      summary: Авторизация юзера (для резидентов и менеджеров)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: API токен создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+  /resident-applications:
+    post:
+      tags:
+      - Applications
+      security: []
+      summary: Создание заявки на резидентство
+      operationId: createResidentApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResidentApplication'
+        description: Данные анкеты
+      responses:
+        '201':
+          description: Заявка создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResidentApplication'
+    get:
+      tags:
+      - Applications
+      summary: Получение списока заявок
+      parameters:
+      - in: query
+        name: filters[status]
+        description: Статус заявки
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Список заявок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResidentApplication'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /resident-applications/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID заявки
+      schema:
+        type: string
+    get:
+      tags:
+      - Applications
+      summary: Получение заявки
+      responses:
+        '200':
+          description: Заявка
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResidentApplication'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Applications
+      summary: Удаление заявки
+      responses:
+        '200':
+          description: Заявка удалена
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /resident-applications/{id}/{action}:
+    put:
+      tags:
+      - Applications
+      summary: Аппрув или отклонение заявки
+      parameters:
+      - in: path
+        name: id
+        description: ID заявки
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: action
+        description: Действие с заявкой
+        required: true
+        schema:
+          type: string
+          enum:
+          - approve
+          - reject
+      responses:
+        '200':
+          description: Заявка обновлена
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /residents:
+    post:
+      tags:
+      - Residents
+      summary: Добавление резидента
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+        description: Будет добавлен новый юзер с типом = resident
+      responses:
+        '201':
+          description: Резидент создан
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    type:
+                      type: array
+                      items:
+                        type: string
+                        example: 'resident'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - Residents
+      summary: Получение списока резидентов
+      parameters:
+      - in: query
+        name: filters[email]
+        description: E-mail фильтр
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Список резидентов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/User'
+                  - type: object
+                    properties:
+                      type:
+                        type: array
+                        items:
+                          type: string
+                          example: 'resident'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /residents/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID резидента
+      schema:
+        type: string
+    get:
+      tags:
+      - Residents
+      summary: Получение резидента
+      responses:
+        '200':
+          description: Резидент
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    type:
+                      type: array
+                      items:
+                        type: string
+                        example: 'resident'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - Residents
+      summary: Апдэйт резидента
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Резидент
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    type:
+                      type: array
+                      items:
+                        type: string
+                        example: 'resident'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Residents
+      summary: Удаление резидента
+      responses:
+        '200':
+          description: Резидент удален
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /zones:
+    post:
+      tags:
+      - Zones
+      summary: Добавление зоны
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zone'
+      responses:
+        '201':
+          description: Зона создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - Zones
+      summary: Получение списока зон
+      parameters:
+      - in: query
+        name: filters[type]
+        description: Type фильтр
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zone'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /zones/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID зоны
+      schema:
+        type: string
+    get:
+      tags:
+      - Zones
+      summary: Получение зоны
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - Zones
+      summary: Апдэйт зоны
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zone'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Zones
+      summary: Удаление зоны
+      responses:
+        '200':
+          description: ''
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /places:
+    post:
+      tags:
+      - Places
+      summary: Добавление точки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Place'
+              - type: object
+                properties:
+                  zone:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+                  resident:
+                    type: string
+                    example: '507f1f77bcf86cd799439012'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - Places
+      summary: Получение списка точек
+      parameters:
+      - in: query
+        name: filters[resident]
+        description: Resident фильтр
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Place'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /places/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID точки
+      schema:
+        type: string
+    get:
+      tags:
+      - Places
+      summary: Получение точки
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - Places
+      summary: Апдэйт точки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Place'
+              - type: object
+                properties:
+                  zone:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+                  resident:
+                    type: string
+                    example: '507f1f77bcf86cd799439012'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Places
+      summary: Удаление точки
+      responses:
+        '200':
+          description: ''
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /events:
+    post:
+      tags:
+      - Events
+      summary: Добавление события
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Event'
+              - type: object
+                properties:
+                  place:
+                    type: string
+                    example: '507f1f77bcf86cd799439014'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - Events
+      summary: Получение списка событий
+      parameters:
+      - in: query
+        name: filters[dateFrom]
+        description: |
+          Фильтр по дате начала события - '2016-08-29T09:12:33.000Z'
+        schema:
+          type: string
+      - in: query
+        name: filters[dateTo]
+        description: |
+          Фильтр по дате конца события - '2016-08-30T09:12:33.000Z'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /events/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID события
+      schema:
+        type: string
+    get:
+      tags:
+      - Events
+      summary: Получение события
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - Events
+      summary: Апдэйт события
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Event'
+              - type: object
+                properties:
+                  place:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Events
+      summary: Удаление события
+      responses:
+        '200':
+          description: ''
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+servers:
+- url: 'https://virtserver.swaggerhub.com/bushev/hhh/1.0.0'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+    ResidentApplication:
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - status
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439011'
+        name:
+          type: string
+          example: 'Выставка драконов'
+        description:
+          type: string
+          example: 'Мы хотели бы...'
+        status:
+          type: string
+          readOnly: true
+          default: new
+          enum:
+          - new
+          - rejected
+          - approved
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - email
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439011'
+        name:
+          type: string
+          example: 'Станислав'
+        email:
+          type: string
+          example: 'st@domain.com'
+        type:
+          type: string
+          enum:
+          - manager
+          - resident
+          description: Роль пользователя
+    Zone:
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439011'
+        name:
+          type: string
+          example: 'Набережная'
+        domId:
+          type: string
+        type:
+          type: string
+          enum:
+          - work
+          - art
+          - sport
+          - free
+    Place:
+      required:
+      - name
+      - status
+      - zone
+      - resident
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439019'
+        name:
+          type: string
+          example: 'Выставка «Samskara»'
+        openHours:
+          type: string
+          example: 'вт-вс 12:00-20:00'
+        type:
+          type: string
+          enum:
+          - eat
+          - exhibition
+          - art
+          - sport
+          - free
+        zone:
+          $ref: '#/components/schemas/Zone'
+        resident:
+          $ref: '#/components/schemas/User'
+    Event:
+      required:
+      - name
+      - place
+      - status
+      properties:
+        name:
+          type: string
+          example: 'Драконы в огне'
+        dateBegin:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        dateEnd:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        price:
+          type: string
+          example: 'от 500 до 800₽'
+        ageLimit:
+          type: string
+          example: '12+'
+        website:
+          type: string
+          example: 'https://vk.com'
+        type:
+          type: string
+          example: 'Выставка / Современное искусство'
+        description:
+          type: string
+          example: Самое увлекательное приключение месяца
+        image:
+          type: string
+          example: 'data:image/png;base64,<binary data>'
+        status:
+          type: string
+          enum:
+          - listed
+          - unlisted
+        place:
+          $ref: '#/components/schemas/Place'
