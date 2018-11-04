@@ -11,14 +11,7 @@ class ResidentApplicationController extends BaseController {
         this.model = residentApplicationModel;
     }
 
-    async create() {
-
-        const item = await this.model.insert(this.request.body);
-
-        this.response.status(201).json(this.refineItemForResponse(item));
-    }
-
-    async list() {
+    getListFilters() {
 
         const filters = {};
         const query   = this.request.query;
@@ -31,23 +24,7 @@ class ResidentApplicationController extends BaseController {
             }
         }
 
-        const items = await this.model.find(filters);
-
-        this.response.status(200).json(items.map(item => {
-            return this.refineItemForResponse(item);
-        }));
-    }
-
-    async get() {
-
-        const item = await this.model.findOne({_id: this.request.params.id});
-
-        if (!item) {
-
-            return this.response.status(404).json({error: 'Not found'});
-        }
-
-        this.response.status(200).json(this.refineItemForResponse(item));
+        return filters;
     }
 
     async action() {

@@ -19,6 +19,8 @@ class ResidentApplicationModel extends BaseModel {
         };
 
         this.responseFields = ['id', 'name', 'phone', 'email', 'description', 'status'];
+
+        this.writableFields = ['name', 'phone', 'email', 'description', 'status'];
     }
 }
 

@@ -12,6 +12,7 @@ const userModel = require('./models/user');
 
 const userController                = require('./controllers/user');
 const residentApplicationController = require('./controllers/resident-application');
+const residentController            = require('./controllers/resident');
 
 const PORT = 3000;
 
@@ -55,6 +56,13 @@ class Loader {
         app.get('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'list'));
         app.get('/resident-applications/:id', (req, res, next) => residentApplicationController(req, res, next, 'get'));
         app.put('/resident-applications/:id/:action', (req, res, next) => residentApplicationController(req, res, next, 'action'));
+        app.delete('/resident-applications/:id', (req, res, next) => residentApplicationController(req, res, next, 'delete'));
+
+        app.post('/residents', (req, res, next) => residentController(req, res, next, 'create'));
+        app.get('/residents', (req, res, next) => residentController(req, res, next, 'list'));
+        app.get('/residents/:id', (req, res, next) => residentController(req, res, next, 'get'));
+        app.put('/residents/:id', (req, res, next) => residentController(req, res, next, 'update'));
+        app.delete('/residents/:id', (req, res, next) => residentController(req, res, next, 'delete'));
 
         app.use((err, req, res, next) => {
 

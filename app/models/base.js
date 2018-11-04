@@ -10,6 +10,8 @@ class BaseModel {
     constructor() {
 
         this.responseFields = [];
+
+        this.writableFields = [];
     }
 
     bootstrap() {

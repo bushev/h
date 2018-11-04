@@ -161,6 +161,8 @@ paths:
                   type: string
                 email:
                   type: string
+                password:
+                  type: string
         description: Будет добавлен новый юзер с типом = resident
       responses:
         '201':
@@ -595,6 +597,8 @@ components:
       required:
       - id
       - name
+      - phone
+      - email
       - description
       - status
       properties:
@@ -605,6 +609,12 @@ components:
         name:
           type: string
           example: 'Выставка драконов'
+        phone:
+          type: string
+          example: '+7920...'
+        email:
+          type: string
+          example: 'st@domain.com'
         description:
           type: string
           example: 'Мы хотели бы...'

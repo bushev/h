@@ -17,6 +17,8 @@ class UserModel extends BaseModel {
         };
 
         this.responseFields = ['id', 'name', 'email', 'type'];
+
+        this.writableFields = ['name', 'email', 'type'];
     }
 
     setupSchema() {
