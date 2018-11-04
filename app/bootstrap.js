@@ -5,6 +5,8 @@ const mongoose   = require('mongoose');
 const bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
 const morgan     = require('morgan');
+const path       = require('path');
+const fs         = require('fs');
 
 require('express-async-errors');
 
@@ -13,6 +15,9 @@ const userModel = require('./models/user');
 const userController                = require('./controllers/user');
 const residentApplicationController = require('./controllers/resident-application');
 const residentController            = require('./controllers/resident');
+const zoneController                = require('./controllers/zone');
+const placeController               = require('./controllers/place');
+const eventController               = require('./controllers/event');
 
 const PORT = 3000;
 
@@ -34,6 +39,8 @@ class Loader {
         }
 
         console.log(`MongoDB connected`);
+
+        // this.loadModels();
 
         // Add super manager account
         await this.addSuperManager();
@@ -63,6 +70,24 @@ class Loader {
         app.get('/residents/:id', (req, res, next) => residentController(req, res, next, 'get'));
         app.put('/residents/:id', (req, res, next) => residentController(req, res, next, 'update'));
         app.delete('/residents/:id', (req, res, next) => residentController(req, res, next, 'delete'));
+
+        app.post('/zones', (req, res, next) => zoneController(req, res, next, 'create'));
+        app.get('/zones', (req, res, next) => zoneController(req, res, next, 'list'));
+        app.get('/zones/:id', (req, res, next) => zoneController(req, res, next, 'get'));
+        app.put('/zones/:id', (req, res, next) => zoneController(req, res, next, 'update'));
+        app.delete('/zones/:id', (req, res, next) => zoneController(req, res, next, 'delete'));
+
+        app.post('/places', (req, res, next) => placeController(req, res, next, 'create'));
+        app.get('/places', (req, res, next) => placeController(req, res, next, 'list'));
+        app.get('/places/:id', (req, res, next) => placeController(req, res, next, 'get'));
+        app.put('/places/:id', (req, res, next) => placeController(req, res, next, 'update'));
+        app.delete('/places/:id', (req, res, next) => placeController(req, res, next, 'delete'));
+
+        app.post('/events', (req, res, next) => eventController(req, res, next, 'create'));
+        app.get('/events', (req, res, next) => eventController(req, res, next, 'list'));
+        app.get('/events/:id', (req, res, next) => eventController(req, res, next, 'get'));
+        app.put('/events/:id', (req, res, next) => eventController(req, res, next, 'update'));
+        app.delete('/events/:id', (req, res, next) => eventController(req, res, next, 'delete'));
 
         app.use((err, req, res, next) => {
 
@@ -95,6 +120,15 @@ class Loader {
             await userModel.insert(superManagerData);
         }
     }
+
+    // loadModels() {
+    //
+    //     const fileNames = fs.readdirSync(path.resolve(__dirname, 'models'));
+    //
+    //     fileNames.filter(fileName => !['base.js'].includes(fileName)).forEach(fileName => {
+    //         require(path.resolve(__dirname, 'models', fileName));
+    //     });
+    // }
 }
 
 const loader = new Loader();
