@@ -35,18 +35,18 @@ class LiveStreamServer {
 
             console.log('[LiveStreamServer postPublish]', `id=${id} StreamPath=${streamPath} args=${JSON.stringify(args)}`);
 
-            const eventId = streamPath.match(/\/live\/(.*)/)[1];
-
-            await LiveStreamServer.setAvailabilityFlag(eventId, true);
+            // const eventId = streamPath.match(/\/live\/(.*)/)[1];
+            //
+            // await LiveStreamServer.setAvailabilityFlag(eventId, true);
         });
 
         nms.on('donePublish', async (id, streamPath, args) => {
 
             console.log('[LiveStreamServer donePublish]', `id=${id} StreamPath=${streamPath} args=${JSON.stringify(args)}`);
 
-            const eventId = streamPath.match(/\/live\/(.*)/)[1];
-
-            await LiveStreamServer.setAvailabilityFlag(eventId, false);
+            // const eventId = streamPath.match(/\/live\/(.*)/)[1];
+            //
+            // await LiveStreamServer.setAvailabilityFlag(eventId, false);
         });
 
         nms.run();
