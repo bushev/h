@@ -1,5 +1,15 @@
 # h
 
+### Endpoints
+
+##### API
+
+`http://<server_ip>:3000`
+
+##### Streaming API
+
+`ws://<server_ip>:8000/live/<eventId>.flv`
+
 ### Upgrade backend
 
 1. Commit & push
