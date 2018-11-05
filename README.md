@@ -1,35 +1,15 @@
 # h
 
-> root@176.112.204.146
-> 3zM1KBEr
+### Upgrade backend
 
-# Install Docker
-https://docs.docker.com/install/linux/docker-ce/ubuntu/
+1. Commit & push
+2. `ssh root@<server_ip> -i ~/.ssh/<your_ssh_private_key>`
+3. `cd h/backend`
+4. `git pull && pm2 restart 0 && pm2 logs`
 
-# Install docker-compose
-https://docs.docker.com/compose/install/#install-compose
+### Upgrade frontend
 
-# Generate SSH key
-ssh-keygen -t rsa -b 4096 -C "bushevuv@gmail.com"
-
-# Copy SSH key
-ssh-copy-id -i ~/.ssh/h.pub root@176.112.204.146
-
-# Login SSH
-ssh root@176.112.204.146 -i ~/.ssh/h
-
-# Add host to .ssh/config
-textedit ~/.ssh.config
-
-# Prepare deployment
-pm2 deploy production setup
-
-# Deploy
-pm2 deploy production update
-
-# Install Node.js
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Install pm2
-sudo npm i -g pm2 
+1. Commit & push
+2. `ssh root@<server_ip> -i ~/.ssh/<your_ssh_private_key>`
+3. `cd h/frontend`
+4. `git pull && ng build`
