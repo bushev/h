@@ -1,5 +1,6 @@
 'use strict';
 
+const path       = require('path');
 const express    = require('express');
 const mongoose   = require('mongoose');
 const bodyParser = require('body-parser');
@@ -123,7 +124,7 @@ class Loader {
             },
             trans: {
                 // ffmpeg: '/usr/local/bin/ffmpeg',
-                ffmpeg: '/usr/bin/ffmpeg',
+                ffmpeg: path.join(__dirname, 'bin', 'ffmpeg'),
                 tasks: [
                     {
                         app: 'live',
