@@ -124,7 +124,7 @@ class Loader {
             },
             trans: {
                 // ffmpeg: '/usr/local/bin/ffmpeg',
-                ffmpeg: path.join(__dirname, 'bin', 'ffmpeg'),
+                ffmpeg: path.join(__dirname, '..', 'bin', 'ffmpeg'),
                 tasks: [
                     {
                         app: 'live',
