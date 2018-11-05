@@ -4,10 +4,7 @@ services:
   hmongo:
     container_name: hmongo
     image: mongo:4.0.3
-    command: mongod --bind_ip 0.0.0.0 --auth
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: h
-      MONGO_INITDB_ROOT_PASSWORD: my_password
+    command: mongod --bind_ip 0.0.0.0
     volumes:
     - ./data/mongo:/data/db/:rw
     ports:
