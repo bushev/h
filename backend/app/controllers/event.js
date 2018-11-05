@@ -10,6 +10,15 @@ class EventController extends BaseController {
 
         this.model = eventModel;
     }
+
+    getItemFromRequest() {
+
+        const item = super.getItemFromRequest();
+
+        if (!item.images) item.images = [];
+
+        return item;
+    }
 }
 
 module.exports = (request, response, next, action) => {

@@ -1,7 +1,6 @@
 'use strict';
 
 const BaseModel = require('./base');
-const mongoose  = require('mongoose');
 
 class PlaceModel extends BaseModel {
 

@@ -1,7 +1,6 @@
 'use strict';
 
 const BaseModel = require('./base');
-const mongoose  = require('mongoose');
 
 class EventModel extends BaseModel {
 
@@ -20,6 +19,7 @@ class EventModel extends BaseModel {
             type: {type: String},
             description: {type: String},
             image: {type: String},
+            images: [{type: String}],
             liveStreamAvailable: {type: Boolean},
             status: {type: String, required: true, index: true, enum: ['listed', 'unlisted']},
             place: {type: 'ObjectId', ref: 'place', autopopulate: true}
@@ -27,12 +27,12 @@ class EventModel extends BaseModel {
 
         this.responseFields = [
             'id', 'name', 'dateBegin', 'dateEnd', 'price', 'ageLimit', 'website', 'type', 'description', 'image',
-            'status', 'place'
+            'images', 'status', 'place'
         ];
 
         this.writableFields = [
             'name', 'dateBegin', 'dateEnd', 'price', 'ageLimit', 'website', 'type', 'description', 'image',
-            'status', 'place'
+            'images', 'status', 'place'
         ];
     }
 }
