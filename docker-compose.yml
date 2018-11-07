@@ -20,6 +20,7 @@ services:
     - ./config/swagger-account.txt:/etc/nginx/swagger-account:ro
     ports:
     - 80:80
+    - 36813:8080
     restart: always
 
   hswagger:
