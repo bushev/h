@@ -1,0 +1,7 @@
+{
+  "name": "psc",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
