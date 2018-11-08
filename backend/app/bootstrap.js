@@ -53,8 +53,8 @@ class Loader {
 
         app.use(morgan('combined'));
 
-        app.use(bodyParser.urlencoded({extended: false}));
-        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+        app.use(bodyParser.json({limit: '50mb'}));
 
         app.post('/signin', (req, res, next) => userController(req, res, next, 'signin'));
         app.post('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'create'));
