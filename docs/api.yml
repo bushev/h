@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Почти REST API
-  version: "0.0.2"
+  version: "0.0.3"
   title: Hackathon API Doc
 tags:
 - name: SignIn
@@ -598,10 +598,7 @@ components:
       type: object
       required:
       - id
-      - name
       - phone
-      - email
-      - description
       - status
       properties:
         id:
