@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Почти REST API
-  version: "0.0.5"
+  version: "0.1.0"
   title: Hackathon API Doc
 tags:
 - name: SignIn
@@ -14,6 +14,8 @@ tags:
   description: Управление зонами
 - name: Places
   description: Управление точками
+- name: RentRequests
+  description: Заявки на аренду
 - name: Events
   description: Управление событиями
 security:
@@ -57,7 +59,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResidentApplication'
+              type: object
+              properties:
+                phone:
+                  type: string
+                  example: '+79299232211'
         description: Данные анкеты
       responses:
         '201':
@@ -65,7 +71,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResidentApplication'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '507f1f77bcf86cd799439019'
+                  phone:
+                    type: string
+                    example: '+79299232211'
+                  status:
+                    type: string
+                    example: new
     get:
       tags:
       - Applications
@@ -125,6 +141,7 @@ paths:
       tags:
       - Applications
       summary: Аппрув или отклонение заявки
+      description: Аппрув заявки автоматически создает аккаунт Резидента
       parameters:
       - in: path
         name: id
@@ -473,6 +490,106 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /rent-requests:
+    post:
+      tags:
+      - RentRequests
+      summary: Добавление заявки на аренду
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RentRequest'
+              - type: object
+                properties:
+                  place:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+                  resident:
+                    type: string
+                    example: '507f1f77bcf86cd799439012'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - RentRequests
+      summary: Получение списка заявок на аренду
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RentRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /resident-requests/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID запроса на аренду
+      schema:
+        type: string
+    get:
+      tags:
+      - RentRequests
+      summary: Получение запроса на аренду
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - RentRequests
+      summary: Апдэйт заявки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RentRequest'
+              - type: object
+                properties:
+                  place:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+                  resident:
+                    type: string
+                    example: '507f1f77bcf86cd799439012'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - RentRequests
+      summary: Удаление заявки на аренду
+      responses:
+        '200':
+          description: ''
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /events:
     post:
       tags:
@@ -734,6 +851,47 @@ components:
           - payed
         zone:
           $ref: '#/components/schemas/Zone'
+        resident:
+          $ref: '#/components/schemas/User'
+    RentRequest:
+      required:
+      - name
+      - status
+      - place
+      - resident
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439019'
+        options:
+          type: array
+          items:
+            type: string
+            enum:
+            - water
+            - gas
+            - electricity
+            - internet
+            - securityCamera
+            - liveCamera
+            - safe
+            - cleaning
+            - shipment
+            - billboards
+        price:
+          type: number
+          readOnly: true
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - new
+          - paymentPending
+          - payed
+        place:
+          $ref: '#/components/schemas/Place'
         resident:
           $ref: '#/components/schemas/User'
     Event:
