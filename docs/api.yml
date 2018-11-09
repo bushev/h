@@ -14,8 +14,6 @@ tags:
   description: Управление зонами
 - name: Places
   description: Управление точками
-- name: Revervations
-  description: Управление бронированиями (карточки аренды)
 - name: Events
   description: Управление событиями
 security:
@@ -475,105 +473,6 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /reservations:
-    post:
-      tags:
-      - Revervations
-      summary: Добавление заявки на бронирование (карточки)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/Reservation'
-              - type: object
-                properties:
-                  resident:
-                    type: string
-                    example: '507f1f77bcf86cd799439014'
-              - type: object
-                properties:
-                  zone:
-                    type: string
-                    example: '507f1f77bcf86cd799439014'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-    get:
-      tags:
-      - Revervations
-      summary: Получение списка карточек аренды
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-  /reservations/{id}:
-    parameters:
-    - in: path
-      name: id
-      required: true
-      description: ID карточки
-      schema:
-        type: string
-    get:
-      tags:
-      - Revervations
-      summary: Получение карточки
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-    put:
-      tags:
-      - Revervations
-      summary: Апдэйт карточки
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-              - $ref: '#/components/schemas/Reservation'
-              - type: object
-                properties:
-                  place:
-                    type: string
-                    example: '507f1f77bcf86cd799439011'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-    delete:
-      tags:
-      - Reservations
-      summary: Удаление карточки
-      responses:
-        '200':
-          description: ''
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
   /events:
     post:
       tags:
@@ -784,43 +683,6 @@ components:
           - billboards
         reserved:
           type: boolean
-    Reservation:
-      required:
-      - zone
-      properties:
-        id:
-          type: string
-          readOnly: true
-          example: '507f1f77bcf86cd799439019'
-        options:
-          type: array
-          items:
-            type: string
-            enum:
-            - water
-            - gas
-            - electricity
-            - internet
-            - securityCamera
-            - liveCamera
-            - safe
-            - cleaning
-            - shipment
-            - billboards
-        price:
-          type: number
-          readOnly: true
-        status:
-          type: string
-          enum:
-          - new
-          - paymentPending
-          - payed
-          - reserved
-        zone:
-          $ref: '#/components/schemas/Zone'
-        resident:
-          $ref: '#/components/schemas/User'
     Place:
       required:
       - name
@@ -846,6 +708,30 @@ components:
           - art
           - sport
           - free
+        options:
+          type: array
+          items:
+            type: string
+            enum:
+            - water
+            - gas
+            - electricity
+            - internet
+            - securityCamera
+            - liveCamera
+            - safe
+            - cleaning
+            - shipment
+            - billboards
+        price:
+          type: number
+          readOnly: true
+        status:
+          type: string
+          enum:
+          - new
+          - paymentPending
+          - payed
         zone:
           $ref: '#/components/schemas/Zone'
         resident:
