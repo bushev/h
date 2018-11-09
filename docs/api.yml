@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Почти REST API
-  version: "0.0.3"
+  version: "0.0.5"
   title: Hackathon API Doc
 tags:
 - name: SignIn
@@ -14,6 +14,8 @@ tags:
   description: Управление зонами
 - name: Places
   description: Управление точками
+- name: Revervations
+  description: Управление бронированиями (карточки аренды)
 - name: Events
   description: Управление событиями
 security:
@@ -473,6 +475,105 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /reservations:
+    post:
+      tags:
+      - Revervations
+      summary: Добавление заявки на бронирование (карточки)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Reservation'
+              - type: object
+                properties:
+                  resident:
+                    type: string
+                    example: '507f1f77bcf86cd799439014'
+              - type: object
+                properties:
+                  zone:
+                    type: string
+                    example: '507f1f77bcf86cd799439014'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      tags:
+      - Revervations
+      summary: Получение списка карточек аренды
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /reservations/{id}:
+    parameters:
+    - in: path
+      name: id
+      required: true
+      description: ID карточки
+      schema:
+        type: string
+    get:
+      tags:
+      - Revervations
+      summary: Получение карточки
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+      - Revervations
+      summary: Апдэйт карточки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Reservation'
+              - type: object
+                properties:
+                  place:
+                    type: string
+                    example: '507f1f77bcf86cd799439011'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+      - Reservations
+      summary: Удаление карточки
+      responses:
+        '200':
+          description: ''
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /events:
     post:
       tags:
@@ -683,7 +784,7 @@ components:
           - billboards
         reserved:
           type: boolean
-    Reservations:
+    Reservation:
       required:
       - zone
       properties:
@@ -708,6 +809,7 @@ components:
             - billboards
         price:
           type: number
+          readOnly: true
         status:
           type: string
           enum:
@@ -776,7 +878,12 @@ components:
           example: 'https://vk.com'
         type:
           type: string
-          example: 'Выставка / Современное искусство'
+          enum:
+          - exhibition
+          - show
+          - theater
+          - excursion
+          - quest
         description:
           type: string
           example: Самое увлекательное приключение месяца
