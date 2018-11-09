@@ -865,6 +865,8 @@ components:
           - new
           - paymentPending
           - payed
+          - rejected
+          - approved
         place:
           $ref: '#/components/schemas/Place'
         resident:
