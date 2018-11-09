@@ -68,8 +68,10 @@ class Loader {
         app.post('/signin', (req, res, next) => userController(req, res, next, 'signin'));
         app.post('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'create'));
 
-        // TODO: Uncomment
-        // app.use(expressJwt({secret: 'JWT_SECRET_TOKEN_HERE'}));
+        app.get('/events', (req, res, next) => eventController(req, res, next, 'list'));
+        app.get('/events/:id', (req, res, next) => eventController(req, res, next, 'get'));
+
+        app.use(expressJwt({secret: 'JWT_SECRET_TOKEN_HERE'}));
 
         app.get('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'list'));
         app.get('/resident-applications/:id', (req, res, next) => residentApplicationController(req, res, next, 'get'));
@@ -95,8 +97,6 @@ class Loader {
         app.delete('/places/:id', (req, res, next) => placeController(req, res, next, 'delete'));
 
         app.post('/events', (req, res, next) => eventController(req, res, next, 'create'));
-        app.get('/events', (req, res, next) => eventController(req, res, next, 'list'));
-        app.get('/events/:id', (req, res, next) => eventController(req, res, next, 'get'));
         app.put('/events/:id', (req, res, next) => eventController(req, res, next, 'update'));
         app.delete('/events/:id', (req, res, next) => eventController(req, res, next, 'delete'));
 
