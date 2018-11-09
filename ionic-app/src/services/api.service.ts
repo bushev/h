@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { PathUtility } from '../basic/path-utility';
-import {ErrorObservable} from 'rxjs-compat/observable/ErrorObservable';
+// import {ErrorObservable} from 'rxjs-compat/observable/ErrorObservable';
 
 @Injectable()
 export class ApiService {
 
-  private currentUser;
+  // private currentUser;
   private apiEndpoint: string = 'http://localhost:3000';
-  private _authToken: string;
+  // private _authToken: string;
 
   constructor(
     private http: HttpClient,
@@ -29,8 +29,8 @@ export class ApiService {
 
   // token is initialised only once
   public async init() {
-    this._authToken = await localStorage.getItem('token');
-    this._authToken = 'adasd';
+    // this._authToken = await localStorage.getItem('token');
+    // this._authToken = 'adasd';
   }
 
   /**
