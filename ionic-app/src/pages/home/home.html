@@ -9,11 +9,20 @@
 
 <ion-content padding>
 
-
-
   <!--<div id='mazemap-container'-->
        <!--style="width: 100%; height: 100%; background: rgba(245,61,61,0.27)"></div>-->
 
+  <ion-card *ngFor="let event of events" [ngStyle]="getCardBg(event)">
+
+    <ion-card-header>
+      {{ event.name }}
+    </ion-card-header>
+
+    <ion-card-content>
+      {{ event.description }}
+    </ion-card-content>
+
+  </ion-card>
 
 
   <!--<button ion-button secondary menuToggle>Toggle Menu</button>-->

@@ -51,6 +51,15 @@ class Loader {
 
         const app = express();
 
+        // TODO: Need review
+        app.use((req, res, next) => {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            next();
+        });
+
         app.use(morgan('combined'));
 
         app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -59,7 +68,8 @@ class Loader {
         app.post('/signin', (req, res, next) => userController(req, res, next, 'signin'));
         app.post('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'create'));
 
-        app.use(expressJwt({secret: 'JWT_SECRET_TOKEN_HERE'}));
+        // TODO: Uncomment
+        // app.use(expressJwt({secret: 'JWT_SECRET_TOKEN_HERE'}));
 
         app.get('/resident-applications', (req, res, next) => residentApplicationController(req, res, next, 'list'));
         app.get('/resident-applications/:id', (req, res, next) => residentApplicationController(req, res, next, 'get'));
