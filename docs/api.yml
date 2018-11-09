@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Почти REST API
-  version: "0.1.0"
+  version: "0.0.1"
   title: Hackathon API Doc
 tags:
 - name: SignIn
@@ -501,6 +501,7 @@ paths:
     get:
       tags:
       - Events
+      security: []
       summary: Получение списка событий
       parameters:
       - in: query
@@ -537,6 +538,7 @@ paths:
     get:
       tags:
       - Events
+      security: []
       summary: Получение события
       responses:
         '200':
@@ -669,6 +671,57 @@ components:
           - art
           - sport
           - free
+        options:
+          type: string
+          enum:
+          - water
+          - gas
+          - electricity
+          - internet
+          - securityCamera
+          - liveCamera
+          - safe
+          - cleaning
+          - shipment
+          - billboards
+        reserved:
+          type: boolean
+    Reservations:
+      required:
+      - zone
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '507f1f77bcf86cd799439019'
+        options:
+          type: array
+          items:
+            type: string
+            enum:
+            - water
+            - gas
+            - electricity
+            - internet
+            - securityCamera
+            - liveCamera
+            - safe
+            - cleaning
+            - shipment
+            - billboards
+        price:
+          type: number
+        status:
+          type: string
+          enum:
+          - new
+          - paymentPending
+          - payed
+          - reserved
+        zone:
+          $ref: '#/components/schemas/Zone'
+        resident:
+          $ref: '#/components/schemas/User'
     Place:
       required:
       - name
@@ -733,6 +786,9 @@ components:
         image:
           type: string
           example: 'data:image/png;base64,<binary data>'
+        liveStreamAvailable:
+          type: boolean
+          readOnly: true
         status:
           type: string
           enum:
