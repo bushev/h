@@ -785,21 +785,6 @@ components:
           - art
           - sport
           - free
-        options:
-          type: string
-          enum:
-          - water
-          - gas
-          - electricity
-          - internet
-          - securityCamera
-          - liveCamera
-          - safe
-          - cleaning
-          - shipment
-          - billboards
-        reserved:
-          type: boolean
     Place:
       required:
       - name
@@ -840,15 +825,6 @@ components:
             - cleaning
             - shipment
             - billboards
-        price:
-          type: number
-          readOnly: true
-        status:
-          type: string
-          enum:
-          - new
-          - paymentPending
-          - payed
         zone:
           $ref: '#/components/schemas/Zone'
         resident:
