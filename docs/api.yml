@@ -825,6 +825,8 @@ components:
             - cleaning
             - shipment
             - billboards
+        image:
+          type: string
         zone:
           $ref: '#/components/schemas/Zone'
         resident:

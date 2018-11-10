@@ -36,7 +36,7 @@ git clone git@github.com:bushev/hackathon.git
 cd hackathon && docker-compose up -d && docker-compose logs --follow
 
 # Run backend
- cd backend && npm i && pm2 start ecosystem.config.js
+cd backend && npm i && pm2 start ecosystem.config.js
 
 # Configure startup script
 pm2 startup
